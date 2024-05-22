@@ -1,0 +1,27 @@
+{
+  "name": "simpli-noti",
+  "version": "1.0.0",
+  "main": "src/main.ts",
+  "module": "src/main.ts",
+  "type": "module",
+  "directories": {
+    "dist": "dist",
+    "src": "src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://TODO"
+  },
+  "author": "Brian Tucker",
+  "scripts": {
+    "watch": "concurrently \"http-server dist -p 8080 -s\" \"vite build --watch\"",
+    "build": "vite build && node js-to-txt-util.cjs"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "prettier": "^2.8.3",
+    "vite": "^5.0.8",
+    "typescript": "^5.3.3",
+    "http-server": "^14.1.1"
+  }
+}
