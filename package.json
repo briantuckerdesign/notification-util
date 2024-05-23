@@ -1,5 +1,5 @@
 {
-  "name": "simpli-noti",
+  "name": "notification-util",
   "version": "1.0.0",
   "main": "src/main.ts",
   "module": "src/main.ts",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://TODO"
+    "url": "git+https://github.com/briantuckerdesign/notification-utilTODO"
   },
   "author": "Brian Tucker",
   "scripts": {
