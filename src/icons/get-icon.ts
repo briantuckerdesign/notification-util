@@ -1,4 +1,5 @@
 import { icons } from '.';
+import { notificationConfig } from '../config';
 
 /**
  * Retrieves the HTML string for a given icon type.
@@ -11,19 +12,19 @@ export function getIcon(type: string): string {
 
   switch (type) {
     case 'success':
-      iconHTML = icons.svg.success;
+      iconHTML = notificationConfig.icons.success;
       break;
     case 'debug':
-      iconHTML = icons.svg.debug;
+      iconHTML = notificationConfig.icons.debug;
       break;
     case 'error':
-      iconHTML = icons.svg.error;
+      iconHTML = notificationConfig.icons.error;
       break;
     case 'warning':
-      iconHTML = icons.svg.warning;
+      iconHTML = notificationConfig.icons.warning;
       break;
     case 'loading':
-      iconHTML = icons.svg.loading;
+      iconHTML = notificationConfig.icons.loading;
       break;
   }
 

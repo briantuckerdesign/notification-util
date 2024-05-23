@@ -1,4 +1,5 @@
 import { icons } from '../icons';
+import { notificationConfig } from '../config'; // Import the configuration
 
 /**
  * Populates a given container with a notification element.
@@ -17,11 +18,13 @@ export function populateNotification(
   message,
   notificationId
 ) {
-  let notificationClass = 'sn_notification';
-  let headingWrapperClass = 'sn_notification-heading-wrapper';
-  let iconClass = 'sn_notification-icon';
-  let messageClass = 'sn_notification-message';
-  let headingClass = 'sn_notification-heading';
+  const {
+    notificationClass,
+    headingWrapperClass,
+    iconClass,
+    messageClass,
+    headingClass
+  } = notificationConfig.classes;
 
   const notification = `
 <div sn-notification="${notificationId}" class="${notificationClass} is-${type}" >

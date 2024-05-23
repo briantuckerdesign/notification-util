@@ -1,48 +1,32 @@
+import { configureNotifications, notificationConfig } from './config';
 import { Loader } from './loader';
 import { Notification } from './notification';
 
-// export default { Loader, Notification };
+export default {
+  Loader,
+  Notification,
+  configureNotifications,
+  notificationConfig
+};
 
-async function test() {
-  new Notification({
-    type: 'success',
-    heading: 'Success',
-    message: 'This is a success message'
-  });
-
-  new Notification({
-    type: 'error',
-    heading: 'Error',
-    message: 'This is an error message',
-    duration: null
-  });
-  new Notification({
-    type: 'warning',
-    heading: 'Warning',
-    message: 'This is a warning message',
-    clickToClose: false
-  });
-  new Notification({
-    type: 'debug',
-    heading: 'Debug',
-    message: 'This is a debug message'
-  });
-
-  const loader = new Loader({
-    heading: 'Loading',
-    message: 'Please wait...'
-  });
-  console.log('loader created');
-  // delay 1 second
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  loader.update({
-    heading: 'Loading',
-    message: 'Almost there...'
-  });
-  console.log('loader updated');
-  // delay 1 second
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  loader.close();
-  console.log('loader closed');
-}
-test();
+/**
+ * 1. call configureNotifications
+ * Leave empty {} to use default values/styles
+ * 
+  classes: {
+    notificationClass: CSS class as string,
+    headingWrapperClass: CSS class as string,
+    iconClass: CSS class as string,
+    messageClass: CSS class as string,
+    headingClass: CSS class as string,
+  },
+  icons: {
+    success: HTML to be injected,
+    warning: HTML to be injected,
+    error: HTML to be injected,
+    debug: HTML to be injected,
+    loading: HTML to be injected,
+  },
+  injectCss: boolean, default true
+ * 
+ */
