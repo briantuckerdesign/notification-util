@@ -1,13 +1,6 @@
-export const errorIcon = `<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 18 18" style="enable-background:new 0 0 18 18;" xml:space="preserve">
-<style type="text/css">
-	.ste{fill:#e0002b;}
-</style>
-<g>
-	<rect x="3.6" y="8.1" class="ste" width="10.8" height="1.8"/>
-	<path class="ste" d="M9,0C4.1,0,0,4.1,0,9s4.1,9,9,9s9-4,9-9S14,0,9,0z M9,16.7c-4.3,0-7.7-3.4-7.7-7.7S4.7,1.3,9,1.3
-		s7.7,3.4,7.7,7.7S13.3,16.7,9,16.7z"/>
-</g>
+export const errorIcon = `
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" 
+	class="iconify iconify--bx" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+	<path fill="#e0002b" d="M11.953 2C6.465 2 2 6.486 2 12s4.486 10 10 10s10-4.486 10-10S17.493 2 11.953 2zM12 20c-4.411 0-8-3.589-8-8s3.567-8 7.953-8C16.391 4 20 7.589 20 12s-3.589 8-8 8z"></path>
+	<path fill="#e0002b" d="M11 7h2v7h-2zm0 8h2v2h-2z"></path>
 </svg>`;

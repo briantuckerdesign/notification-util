@@ -1,9 +1,26 @@
 import { closeNotification } from './close-notification';
+import { enableClickToClose } from './enable-click-to-close';
 import { populateNotification } from './populate-notification';
 
-export function createNotification(type, heading, message, duration) {
+/**
+ * Creates and displays a notification with specified options.
+ *
+ * @param {string} type - The type of the notification (e.g., 'success', 'error').
+ * @param {string} heading - The heading text of the notification.
+ * @param {string} message - The message text of the notification.
+ * @param {number|null} duration - The duration in milliseconds before the notification will automatically close. Pass `null` for notifications that do not auto-close.
+ * @param {boolean} clickToClose - Whether the notification can be closed by clicking on it.
+ * @returns {HTMLElement} The notification element that was created and appended to the DOM.
+ */
+export function createNotification(
+  type,
+  heading,
+  message,
+  duration,
+  clickToClose
+) {
   const container = document.querySelector('[sn-notification-container]');
-  const notificationId = Math.random().toString(36).substr(2, 9);
+  const notificationId = Math.random().toString(36).substring(2, 11);
 
   const notification = populateNotification(
     container,
@@ -13,8 +30,10 @@ export function createNotification(type, heading, message, duration) {
     notificationId
   );
 
-  // If duration is provided, close notification after duration
+  container.appendChild(notification);
+
   if (duration) closeNotification(notification, duration);
+  if (clickToClose) enableClickToClose(notification);
 
   return notification;
 }

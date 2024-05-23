@@ -4,10 +4,10 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
-    minify: true,
+    minify: false,
     lib: {
       entry: 'src/main.ts',
-      name: 'id-starter-ts',
+      name: 'notification-util',
       formats: ['es'],
       fileName: 'main'
     },

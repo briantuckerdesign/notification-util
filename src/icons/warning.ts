@@ -1,14 +1,7 @@
-export const warningIcon = `<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve" width="18" height="18">
-<style type="text/css">
-	.stw{fill:#ecca1d;}
-</style>
-<path class="stw" d="M98,76.7L60.1,11.1C58,7.5,54.1,5.2,50,5.2s-8,2.2-10.1,5.8L1.7,77.3c-2.1,3.6-2.1,8.1,0,11.7
-	c2.1,3.6,5.9,5.8,10.1,5.8h76.5c6.4,0,11.7-5.2,11.7-11.7C99.9,80.8,99.2,78.6,98,76.7z M88.2,87H11.8c-1.4,0-2.7-0.7-3.4-1.9
-	c-0.7-1.2-0.7-2.7,0-3.9L46.6,15c0.7-1.2,2-1.9,3.4-1.9c1.4,0,2.7,0.7,3.4,1.9l37.9,65.7c0,0.1,0.1,0.2,0.1,0.2
-	c0.4,0.6,0.7,1.4,0.7,2.2C92.1,85.2,90.4,87,88.2,87z M50,65.5c2.4,0,4.3-1.9,4.3-4.3V38.6c0-2.4-1.9-4.3-4.3-4.3s-4.3,1.9-4.3,4.3
-	v22.6C45.7,63.5,47.6,65.5,50,65.5z M50,68c-1.5,0-2.9,0.6-3.9,1.6c-1,1-1.6,2.5-1.6,3.9c0,1.5,0.6,2.9,1.6,3.9c1,1,2.5,1.6,3.9,1.6
-	c1.5,0,2.9-0.6,3.9-1.6c1-1,1.6-2.5,1.6-3.9c0-1.5-0.6-2.9-1.6-3.9C52.9,68.6,51.5,68,50,68z"/>
+export const warningIcon = `
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" 
+	class="iconify iconify--bx" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+	<path fill="#ecca1d" d="M11.001 10h2v5h-2zM11 16h2v2h-2z"></path>
+	<path fill="#ecca1d" d="M13.768 4.2C13.42 3.545 12.742 3.138 12 3.138s-1.42.407-1.768 1.063L2.894 18.064a1.986 1.986 0 0 0 .054 1.968A1.984 1.984 0 0 0 4.661 21h14.678c.708 0 1.349-.362 1.714-.968a1.989 1.989 0 0 0 .054-1.968L13.768 4.2zM4.661 19L12 5.137L19.344 19H4.661z">
+	</path>
 </svg>`;

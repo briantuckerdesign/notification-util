@@ -1,42 +1,48 @@
-import { notify as simpliNoti } from './notifications';
+import { Loader } from './loader';
+import { Notification } from './notification';
 
-// Pushes function to window object so it can be called in Webflow
-if (typeof window !== 'undefined') {
-  (window as any).simpliNoti = simpliNoti;
+// export default { Loader, Notification };
+
+async function test() {
+  new Notification({
+    type: 'success',
+    heading: 'Success',
+    message: 'This is a success message'
+  });
+
+  new Notification({
+    type: 'error',
+    heading: 'Error',
+    message: 'This is an error message',
+    duration: null
+  });
+  new Notification({
+    type: 'warning',
+    heading: 'Warning',
+    message: 'This is a warning message',
+    clickToClose: false
+  });
+  new Notification({
+    type: 'debug',
+    heading: 'Debug',
+    message: 'This is a debug message'
+  });
+
+  const loader = new Loader({
+    heading: 'Loading',
+    message: 'Please wait...'
+  });
+  console.log('loader created');
+  // delay 1 second
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  loader.update({
+    heading: 'Loading',
+    message: 'Almost there...'
+  });
+  console.log('loader updated');
+  // delay 1 second
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  loader.close();
+  console.log('loader closed');
 }
-
-export { simpliNoti };
-
-/**
- * expected usage:
- * should probably be a class instead of a function
- * That way it returns an instance of the loader, and the update
- * and end methods can be called on that instance
- * rather than passing the loader around
- *
- */
-let loader = simpliNoti.loader.start({
-  heading: 'Loading...',
-  message: 'Please wait...'
-});
-simpliNoti.loader.update(loader, {
-  heading: 'Almost there...',
-  message: 'Just a few more seconds...'
-});
-simpliNoti.loader.end(loader, {
-  heading: 'Done!',
-  message: 'You did it!'
-});
-
-simpliNoti.success({
-  heading: 'Success!',
-  message: 'You did it!',
-  duration: 5000,
-  clickToClose: false
-});
-simpliNoti.error({
-  heading: 'Error!',
-  message: 'Something went wrong!',
-  duration: null,
-  clickToClose: true
-});
+test();
