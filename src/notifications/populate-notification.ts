@@ -23,7 +23,8 @@ export function populateNotification(
     headingWrapperClass,
     iconClass,
     messageClass,
-    headingClass
+    headingClass,
+    durationClass
   } = notificationConfig.classes;
 
   const notificationToInject = `
@@ -33,6 +34,7 @@ export function populateNotification(
     <div sn-notification-heading="true" class="${headingClass}">${heading}</div>
   </div>
   <div sn-notification-message class="${messageClass}">${message}</div>
+  <div sn-notification-duration class="${durationClass}"></div>
 </div>`;
 
   container.insertAdjacentHTML('beforeend', notificationToInject);

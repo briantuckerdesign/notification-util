@@ -6,18 +6,18 @@ body {
       sans-serif, sans-serif;
   }
   :root {
-    --red: #ff005d;
-    --red-light: #ffebef;
-    --green: #00c465;
-    --green-light: #e3fff1;
-    --yellow: #e0b300;
-    --yellow-light: #fdf8e9;
-    --blue: #0077ff;
-    --blue-light: #e9f4ff;
-    --grey-light: #e3e3e3;
-    --grey: #74717b;
-    --white: #fff;
-    --black: #000;
+    --sn-red: #ff005d;
+    --sn-red-light: #ffebef;
+    --sn-green: #00c465;
+    --sn-green-light: #e3fff1;
+    --sn-yellow: #e0b300;
+    --sn-yellow-light: #fdf8e9;
+    --sn-blue: #0077ff;
+    --sn-blue-light: #e9f4ff;
+    --sn-grey-light: #e3e3e3;
+    --sn-grey: #74717b;
+    --sn-white: #fff;
+    --sn-black: #000;
   }
   .sn_notification {
     z-index: 99999;
@@ -39,38 +39,40 @@ body {
     transition-property: opacity;
     transition-duration: 200ms;
     transition-timing-function: ease;
+    overflow: hidden;
+    position: relative;
   }
   .sn_notification.is-success {
-    border-color: var(--green);
-    background-color: var(--green-light);
+    border-color: var(--sn-green);
+    background-color: var(--sn-green-light);
   }
 
   .sn_notification.is-error {
-    border-color: var(--red);
-    background-color: var(--red-light);
-    color: var(--black);
+    border-color: var(--sn-red);
+    background-color: var(--sn-red-light);
+    color: var(--sn-black);
   }
 
   .sn_notification.is-warning {
-    border-color: var(--yellow);
-    background-color: var(--yellow-light);
+    border-color: var(--sn-yellow);
+    background-color: var(--sn-yellow-light);
   }
 
   .sn_notification.is-debug {
-    border-color: var(--blue);
-    background-color: var(--blue-light);
+    border-color: var(--sn-blue);
+    background-color: var(--sn-blue-light);
   }
 
   .sn_notification.is-loading {
-    border-color: var(--grey-light);
-    background-color: var(--grey);
-    color: var(--white);
+    border-color: var(--sn-grey-light);
+    background-color: var(--sn-grey);
+    color: var(--sn-white);
   }
   .sn_spinner {
     margin-top: 5px;
     width: 18px;
     height: 18px;
-    border: 2px solid var(--grey-light);
+    border: 2px solid var(--sn-grey-light);
     border-bottom-color: transparent;
     border-radius: 50%;
     display: inline-block;
@@ -118,6 +120,23 @@ body {
   }
   .sn_notification-message {
     font-size: 0.875rem;
+  }
+  .sn_notification-duration {
+    width: 0%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 0.125rem;
+    background-color: var(--sn-black);
+    opacity: 0.15;
+  }
+  @keyframes growWidth {
+    from {
+      width: 0%;
+    }
+    to {
+      width: 100%;
+    }
   }
 `;
 function injectCss() {
@@ -188,7 +207,8 @@ const notificationConfig = {
     headingWrapperClass: "sn_notification-heading-wrapper",
     iconClass: "sn_notification-icon",
     messageClass: "sn_notification-message",
-    headingClass: "sn_notification-heading"
+    headingClass: "sn_notification-heading",
+    durationClass: "sn_notification-duration"
   },
   icons: {
     success: icons.svg.success,
@@ -237,6 +257,17 @@ function getOptions(userOptions) {
   return { heading, message, duration, clickToClose };
 }
 function closeNotification(notification, duration) {
+  if (duration > 0) {
+    const durationElement = notification.querySelector(
+      "[sn-notification-duration]"
+    );
+    if (durationElement) {
+      durationElement.style.animationName = "growWidth";
+      durationElement.style.animationDuration = `${duration}ms`;
+      durationElement.style.animationTimingFunction = "linear";
+      durationElement.style.animationFillMode = "forwards";
+    }
+  }
   setTimeout(() => {
     notification.style.opacity = "0";
     setTimeout(() => {
@@ -258,7 +289,8 @@ function populateNotification(container, type, heading, message, notificationId)
     headingWrapperClass,
     iconClass,
     messageClass,
-    headingClass
+    headingClass,
+    durationClass
   } = notificationConfig.classes;
   const notificationToInject = `
 <div sn-notification="${notificationId}" class="${notificationClass} is-${type}" >
@@ -267,6 +299,7 @@ function populateNotification(container, type, heading, message, notificationId)
     <div sn-notification-heading="true" class="${headingClass}">${heading}</div>
   </div>
   <div sn-notification-message class="${messageClass}">${message}</div>
+  <div sn-notification-duration class="${durationClass}"></div>
 </div>`;
   container.insertAdjacentHTML("beforeend", notificationToInject);
   const notification = container.querySelector(
@@ -292,8 +325,9 @@ function createNotification(type, heading, message, duration, clickToClose) {
     notificationId
   );
   container.appendChild(notification);
-  if (duration)
+  if (duration) {
     closeNotification(notification, duration);
+  }
   if (clickToClose)
     enableClickToClose(notification);
   return notification;

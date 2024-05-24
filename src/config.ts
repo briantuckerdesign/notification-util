@@ -8,7 +8,8 @@ export const notificationConfig = {
     headingWrapperClass: 'sn_notification-heading-wrapper',
     iconClass: 'sn_notification-icon',
     messageClass: 'sn_notification-message',
-    headingClass: 'sn_notification-heading'
+    headingClass: 'sn_notification-heading',
+    durationClass: 'sn_notification-duration'
   },
   icons: {
     success: icons.svg.success,
