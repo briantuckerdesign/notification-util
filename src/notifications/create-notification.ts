@@ -35,7 +35,9 @@ export function createNotification(
 
   container.appendChild(notification);
 
-  if (duration) closeNotification(notification, duration);
+  if (duration) {
+    closeNotification(notification, duration);
+  }
   if (clickToClose) enableClickToClose(notification);
 
   return notification;
