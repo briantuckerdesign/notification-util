@@ -2,6 +2,7 @@ import { injectCss } from './defaultCss';
 import { icons } from './icons';
 
 export const notificationConfig = {
+  containerSelector: '[sn-notification-container]',
   classes: {
     notificationClass: 'sn_notification',
     headingWrapperClass: 'sn_notification-heading-wrapper',
@@ -63,48 +64,3 @@ function deepMerge(target: any, source: any) {
     }
   });
 }
-
-// function deepMerge(target: any, source: any) {
-//   Object.keys(source).forEach((key) => {
-//     if (
-//       source[key] &&
-//       typeof source[key] === 'object' &&
-//       !(source[key] instanceof Array)
-//     ) {
-//       if (!target[key]) {
-//         target[key] = {};
-//       }
-//       deepMerge(target[key], source[key]);
-//     } else {
-//       target[key] = source[key];
-//     }
-//   });
-// }
-
-// export function configureNotifications(
-//   options?: Partial<typeof notificationConfig>
-// ) {
-//   if (options) {
-//     // Deep merge options into notificationConfig
-//     deepMerge(notificationConfig, options);
-//   }
-
-//   if (notificationConfig.injectCss) {
-//     injectCss();
-//   }
-// }
-
-// export function configureNotifications(
-//   options?: Partial<typeof notificationConfig>
-// ) {
-//   // Check if icons are provided in the options and merge them
-//   if (options.icons) {
-//     Object.assign(notificationConfig.icons, options.icons);
-//     delete options.icons; // This line ensures the rest of the options can be merged without overwriting the entire icons object
-//   }
-
-//   Object.assign(notificationConfig, options);
-//   if (notificationConfig.injectCss) {
-//     injectCss();
-//   }
-// }

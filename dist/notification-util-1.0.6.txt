@@ -182,6 +182,7 @@ let icons = {
   }
 };
 const notificationConfig = {
+  containerSelector: "[sn-notification-container]",
   classes: {
     notificationClass: "sn_notification",
     headingWrapperClass: "sn_notification-heading-wrapper",
@@ -229,8 +230,6 @@ const defaultOptions = {
 };
 function getOptions(userOptions) {
   let options = { ...defaultOptions, ...userOptions };
-  if (!options.heading)
-    throw new Error("Heading is required for success notification");
   let heading = options.heading;
   let message = options.message;
   let duration = options.duration;
@@ -261,7 +260,7 @@ function populateNotification(container, type, heading, message, notificationId)
     messageClass,
     headingClass
   } = notificationConfig.classes;
-  const notification = `
+  const notificationToInject = `
 <div sn-notification="${notificationId}" class="${notificationClass} is-${type}" >
   <div sn-heading-wrapper class="${headingWrapperClass}">
     <div sn-notification-icon class="${iconClass}">${icons.get(type)}</div>
@@ -269,11 +268,21 @@ function populateNotification(container, type, heading, message, notificationId)
   </div>
   <div sn-notification-message class="${messageClass}">${message}</div>
 </div>`;
-  container.insertAdjacentHTML("beforeend", notification);
-  return container.querySelector(`[sn-notification="${notificationId}"]`);
+  container.insertAdjacentHTML("beforeend", notificationToInject);
+  const notification = container.querySelector(
+    `[sn-notification="${notificationId}"]`
+  );
+  const messageElement = notification.querySelector(
+    "[sn-notification-message]"
+  );
+  if (!message)
+    messageElement.style.display = "none";
+  return notification;
 }
 function createNotification(type, heading, message, duration, clickToClose) {
-  const container = document.querySelector("[sn-notification-container]");
+  const container = document.querySelector(
+    notificationConfig.containerSelector
+  );
   const notificationId = Math.random().toString(36).substring(2, 11);
   const notification = populateNotification(
     container,
@@ -296,13 +305,15 @@ function startLoader(userOptions) {
 function updateLoader(loader, userOptions) {
   let { heading, message } = getOptions(userOptions);
   const headingElement = loader.querySelector("[sn-notification-heading]");
-  if (headingElement)
+  if (headingElement && heading)
     headingElement.innerHTML = heading;
   const messageElement = loader.querySelector("[sn-notification-message]");
-  if (messageElement) {
+  if (messageElement && message) {
     messageElement.innerHTML = message;
+    messageElement.style.display = "block";
   } else {
     messageElement.innerHTML = "";
+    messageElement.style.display = "none";
   }
 }
 class Loader {
@@ -361,7 +372,7 @@ class Notification {
   constructor({
     type,
     heading,
-    message,
+    message = "",
     duration = defaultOptions.duration,
     clickToClose = defaultOptions.clickToClose
   }) {
@@ -411,13 +422,10 @@ class Notification {
     }
   }
 }
-const main = {
+export {
   Loader,
   Notification,
   configureNotifications,
   notificationConfig
-};
-export {
-  main as default
 };
 })()

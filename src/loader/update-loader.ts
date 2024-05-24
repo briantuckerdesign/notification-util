@@ -5,13 +5,16 @@ export function updateLoader(loader, userOptions: object) {
 
   // Update the loader
   const headingElement = loader.querySelector('[sn-notification-heading]');
-  if (headingElement) headingElement.innerHTML = heading;
+  if (headingElement && heading) headingElement.innerHTML = heading;
 
   // Update the message
   const messageElement = loader.querySelector('[sn-notification-message]');
-  if (messageElement) {
+
+  if (messageElement && message) {
     messageElement.innerHTML = message;
+    messageElement.style.display = 'block';
   } else {
     messageElement.innerHTML = '';
+    messageElement.style.display = 'none';
   }
 }

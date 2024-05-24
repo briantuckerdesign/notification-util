@@ -20,8 +20,6 @@ export const defaultOptions = {
  */
 export function getOptions(userOptions: any) {
   let options = { ...defaultOptions, ...userOptions };
-  if (!options.heading)
-    throw new Error('Heading is required for success notification');
   let heading = options.heading;
   let message = options.message;
   let duration = options.duration;

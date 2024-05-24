@@ -30,7 +30,7 @@ export class Notification {
   constructor({
     type,
     heading,
-    message,
+    message = '',
     duration = defaultOptions.duration,
     clickToClose = defaultOptions.clickToClose
   }) {

@@ -26,7 +26,7 @@ export function populateNotification(
     headingClass
   } = notificationConfig.classes;
 
-  const notification = `
+  const notificationToInject = `
 <div sn-notification="${notificationId}" class="${notificationClass} is-${type}" >
   <div sn-heading-wrapper class="${headingWrapperClass}">
     <div sn-notification-icon class="${iconClass}">${icons.get(type)}</div>
@@ -35,7 +35,14 @@ export function populateNotification(
   <div sn-notification-message class="${messageClass}">${message}</div>
 </div>`;
 
-  container.insertAdjacentHTML('beforeend', notification);
+  container.insertAdjacentHTML('beforeend', notificationToInject);
+  const notification = container.querySelector(
+    `[sn-notification="${notificationId}"]`
+  );
+  const messageElement = notification.querySelector(
+    '[sn-notification-message]'
+  );
+  if (!message) messageElement.style.display = 'none';
 
-  return container.querySelector(`[sn-notification="${notificationId}"]`);
+  return notification;
 }

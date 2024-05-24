@@ -1,3 +1,4 @@
+import { notificationConfig } from '../config';
 import { closeNotification } from './close-notification';
 import { enableClickToClose } from './enable-click-to-close';
 import { populateNotification } from './populate-notification';
@@ -19,7 +20,9 @@ export function createNotification(
   duration,
   clickToClose
 ) {
-  const container = document.querySelector('[sn-notification-container]');
+  const container = document.querySelector(
+    notificationConfig.containerSelector
+  );
   const notificationId = Math.random().toString(36).substring(2, 11);
 
   const notification = populateNotification(

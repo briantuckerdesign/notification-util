@@ -2,17 +2,14 @@ import { configureNotifications, notificationConfig } from './config';
 import { Loader } from './loader';
 import { Notification } from './notification';
 
-export default {
-  Loader,
-  Notification,
-  configureNotifications,
-  notificationConfig
-};
+export { Loader, Notification, configureNotifications, notificationConfig };
 
 /**
  * 1. call configureNotifications
  * Leave empty {} to use default values/styles
  * 
+ * 
+  containerSelector: selector, can be attr, class, etc
   classes: {
     notificationClass: CSS class as string,
     headingWrapperClass: CSS class as string,
