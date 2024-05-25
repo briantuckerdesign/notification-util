@@ -1,9 +1,9 @@
 import { configure, config } from './config';
-import { Loader } from './Loader';
+import { Spinner } from './spinner';
 import { Notification } from './Notification';
 
 export default {
-  Loader,
+  Spinner,
   Notification,
   configure,
   config

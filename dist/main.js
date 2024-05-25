@@ -464,7 +464,7 @@ function updateNotification(notification, userOptions) {
     bodyElement.style.display = "none";
   }
 }
-class Loader {
+class Spinner {
   constructor(options) {
     this.element = null;
     this.element = createNotification("spinner", options);
@@ -522,7 +522,7 @@ class Notification {
   }
 }
 window.notifyUtil = {
-  Loader,
+  Spinner,
   Notification,
   configure,
   config

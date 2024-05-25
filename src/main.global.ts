@@ -1,6 +1,6 @@
 import { configure, config } from './config';
-import { Loader } from './Loader';
-import { Notification } from './Notification';
+import { Spinner } from './spinner';
+import { Notification } from './notification';
 
 declare global {
   interface Window {
@@ -9,7 +9,7 @@ declare global {
 }
 
 window.notifyUtil = {
-  Loader,
+  Spinner,
   Notification,
   configure,
   config
