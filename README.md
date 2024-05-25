@@ -12,7 +12,7 @@ Have a div with attribute `sn-notification-container`.
 You can use the built in class if you want. It puts it in the top right of the page and adds gap between each notification.
 
 ```html
-<div sn_notification-container class="sn_notification-container"></div>
+<div nu_notification-container class="nu_notification-container"></div>
 ```
 
 ```typescript
