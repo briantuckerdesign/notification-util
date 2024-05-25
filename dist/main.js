@@ -448,6 +448,14 @@ function createNotification(type, userOptions) {
     enableClickToClose(notification);
   return notification;
 }
+const notify = {
+  success: (options) => createNotification("success", options),
+  error: (options) => createNotification("error", options),
+  warning: (options) => createNotification("warning", options),
+  debug: (options) => createNotification("debug", options),
+  info: (options) => createNotification("info", options),
+  spinner: (options) => createNotification("spinner", options)
+};
 function updateNotification(notification, userOptions) {
   let { heading, body } = getOptions(userOptions);
   const headingElement = notification.querySelector(
@@ -464,30 +472,6 @@ function updateNotification(notification, userOptions) {
     bodyElement.style.display = "none";
   }
 }
-class Spinner {
-  constructor(options) {
-    this.element = null;
-    this.element = createNotification("spinner", options);
-  }
-  update(options) {
-    if (!this.element)
-      return;
-    updateNotification(this.element, options);
-  }
-  close() {
-    if (!this.element)
-      return;
-    this.element.remove();
-    this.element = null;
-  }
-}
-const notify = {
-  success: (options) => createNotification("success", options),
-  error: (options) => createNotification("error", options),
-  warning: (options) => createNotification("warning", options),
-  debug: (options) => createNotification("debug", options),
-  info: (options) => createNotification("info", options)
-};
 class Notification {
   constructor({
     type,
@@ -522,7 +506,6 @@ class Notification {
   }
 }
 window.notifyUtil = {
-  Spinner,
   Notification,
   configure,
   config

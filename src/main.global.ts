@@ -1,5 +1,4 @@
 import { configure, config } from './config';
-import { Spinner } from './spinner';
 import { Notification } from './notification';
 
 declare global {
@@ -9,7 +8,6 @@ declare global {
 }
 
 window.notifyUtil = {
-  Spinner,
   Notification,
   configure,
   config

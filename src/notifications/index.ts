@@ -5,5 +5,6 @@ export const notify = {
   error: (options: object) => createNotification('error', options),
   warning: (options: object) => createNotification('warning', options),
   debug: (options: object) => createNotification('debug', options),
-  info: (options: object) => createNotification('info', options)
+  info: (options: object) => createNotification('info', options),
+  spinner: (options: object) => createNotification('spinner', options)
 };
