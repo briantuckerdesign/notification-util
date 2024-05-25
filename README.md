@@ -1,34 +1,51 @@
-# Notification util
+# notify-util
 
 Very simple notification system for JS/TS projects.
 
 ## Installation
 
-`npm i notification-util`
+`npm i notify-util`
+
+## Quick start
+
+Have a div with attribute `sn-notification-container`. 
+You can use the built in class if you want. It puts it in the top right of the page and adds gap between each notification.
+
+```html
+<div sn_notification-container class="sn_notification-container"></div>
+```
+
+```typescript
+import notifyUtil from 'notify-util'
+
+notifyUtil.configure({});
+
+new notifyUtil.Notification({
+  type: "success",
+  heading: "Wow that was fast!",
+  body: "Skrt skrt",
+});
+```
 
 ## Configuration
 
-Only has to be called once, before using the `Notification` or `Loader` class.
-
 ```typescript
-import {
-  Notification,
-  Loader,
-  configureNotifications
-} from 'notification-util';
+import notifyUtil from 'notify-util'
 
-configureNotification({}); // Required, but can be empty
+notifyUtil.configure({
+  // options here
+});
 ```
 
 ### Configuration options
 
-You must run `configureNotification` before using the `Notification` or `Loader` class.
+You must run `configure` before using the `Notification` class.
 
 To run without customization, pass an empty object as argument.
 
 You can override any of default settings by following the structure below.
 
-![Notifiation dissection](./src/assets/Notification%20breakdown.png)
+![Notifiation dissection](./assets/Notification%20breakdown.png)
 
 | Option                | Description                                                                                     |
 | --------------------- | ----------------------------------------------------------------------------------------------- |
@@ -37,60 +54,41 @@ You can override any of default settings by following the structure below.
 | → notificationClass   | CSS class as `string`, no prefixed `.`                                                          |
 | → headingWrapperClass | CSS class as `string`, no prefixed `.`                                                          |
 | → iconClass           | CSS class as `string`, no prefixed `.`                                                          |
-| → messageClass        | CSS class as `string`, no prefixed `.`                                                          |
 | → headingClass        | CSS class as `string`, no prefixed `.`                                                          |
+| → bodyClass           | CSS class as `string`, no prefixed `.`                                                          |
+| → progressBarClass    | CSS class as `string`, no prefixed `.`                                                          |
 | icons                 | Override the default icons by providing your own.                                               |
 | → success             | `string` injected as HTML                                                                       |
 | → warning             | `string` injected as HTML                                                                       |
 | → error               | `string` injected as HTML                                                                       |
 | → debug               | `string` injected as HTML                                                                       |
 | → loading             | `string` injected as HTML                                                                       |
-| injectCss             | `boolean` Inject default CSS. If disabling, be sure to provide your own animation CSS.          |
+| → spinner             | `string` injected as HTML                                                                       |
+| Theme                 | `string` light / dark / auto / none                                                             |
 
 #### Defaults
 
 ```typescript
 configureNotification({
-  containerSelector: '[sn-notification-container]',
+  containerSelector: '[nu_notification-container]',
   classes: {
-    notificationClass: 'sn_notification',
-    headingWrapperClass: 'sn_notification-heading-wrapper',
-    iconClass: 'sn_notification-icon',
-    messageClass: 'sn_notification-message',
-    headingClass: 'sn_notification-heading'
+    notificationClass: 'nu_notification',
+    headingWrapperClass: 'nu_notification-heading-wrapper',
+    iconClass: 'nu_notification-icon',
+    headingClass: 'nu_notification-heading',
+    bodyClass: 'nu_notification-body',
+    progressBarClass: 'nu_notification-progress-bar'
   },
   icons: {
-    success: icons.success,
-    warning: icons.warning,
-    error: icons.error,
-    debug: icons.debug,
-    loading: icons.loading
+    success: icons.svg.success,
+    warning: icons.svg.warning,
+    error: icons.svg.error,
+    debug: icons.svg.debug,
+    spinner: icons.svg.spinner,
+    info: icons.svg.info
   },
-  injectCss: false
+  theme: 'light'
 });
-```
-
-#### Animation CSS provided
-
-growWidth is used for showing duration of notification, rotation is used in loading icon.
-
-```css
-@keyframes growWidth {
-  from {
-    width: 0%;
-  }
-  to {
-    width: 100%;
-  }
-}
-@keyframes rotation {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
 ```
 
 ## Notification
@@ -101,61 +99,50 @@ Returns an object if you need to remove it programmatically. e.g.: `myNotificati
 
 ### Options
 
+For spinner, `clickToClose` is forced `false` and `duration` is forced `null`.
+
 ```typescript
-new Notification({
-  type: 'success' | 'warning' | 'error' | 'debug', // Required
+new notifyUtil.Notification({
+  type: 'success' | 'warning' | 'error' | 'debug' | 'info' | 'spinner', // Required
   heading: string, // Required
-  message: string,
+  body: string,
   duration: number | null, // Default: 3500 (ms), null for infinite
   clickToClose: boolean // Default: true
 });
 ```
 
-### Example usage
+### Examples 
+
+#### Success notification
 
 ```typescript
-import { Notification, configureNotifications } from 'notification-util';
-
-configureNotification({}); // Required, but can be empty
-
-new Notification({
+new notifyUtil.Notification({
   type: 'success',
   heading: 'Success heading',
-  message: 'Success message'
+  body: 'Success message'
 });
 ```
 
-## Loader
-
-Displays a spinning loader with a heading and message. Returns an object with methods to update the loader and close it.
-
-### Options
+#### Spinner
 
 ```typescript
-new Loader({
-  heading: string, // Required
-  message: string
-});
-```
-
-### Example usage
-
-```typescript
-import { Loader, configureNotifications } from 'notification-util';
-
-configureNotification({}); // Required, but can be empty
-
-const myLoaderMessage = new Loader({
-  heading: 'Loader heading',
-  message: 'Loader message'
+const loadingIndicator = new notifyUtil.Notification({
+  type: 'spinner',
+  heading: 'Loading...',
+  body: 'Working on it'
 });
 
 // some time passes
 
-myLoaderMessage.update({
-  heading: 'Updated heading',
-  message: 'Updated message'
+loadingIndicator.update({
+  heading: 'Loading...',
+  body: 'Almost there'
 });
+
+// some time passes
+
+loadingIndicator.close();
+```
 
 // some time passes
 
