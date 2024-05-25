@@ -2,6 +2,8 @@
 
 Very simple notification system for JS/TS projects.
 
+[Live example](https://notify-util.bybrian.io/)
+
 ## Installation via NPM
 
 `npm i notify-util`
