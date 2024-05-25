@@ -1,4 +1,4 @@
-import { Notification } from '../notification';
+import { Notification } from '../Notification';
 
 /**
  * Closes a notification element after a specified duration by fading it out and then removing it from the DOM.

@@ -16,7 +16,8 @@
  * The `remove` method allows for the manual removal of the notification's element from the DOM.
  */
 import { notify } from './notifications';
-import { defaultOptions } from './notifications/options';
+import { defaultOptions } from './notifications/default-options';
+import { updateNotification } from './notifications/update-notification';
 
 export class Notification {
   private element: HTMLElement | null = null;
@@ -40,52 +41,22 @@ export class Notification {
     this.duration = duration;
     this.clickToClose = clickToClose;
 
-    switch (this.type) {
-      case 'success':
-        this.element = notify.success({
-          heading: this.heading,
-          body: this.body,
-          duration: this.duration,
-          clickToClose: this.clickToClose
-        });
-        break;
-      case 'error':
-        this.element = notify.error({
-          heading: this.heading,
-          body: this.body,
-          duration: this.duration,
-          clickToClose: this.clickToClose
-        });
-        break;
-      case 'warning':
-        this.element = notify.warning({
-          heading: this.heading,
-          body: this.body,
-          duration: this.duration,
-          clickToClose: this.clickToClose
-        });
-        break;
-      case 'debug':
-        this.element = notify.debug({
-          heading: this.heading,
-          body: this.body,
-          duration: this.duration,
-          clickToClose: this.clickToClose
-        });
-        break;
-      case 'info':
-        this.element = notify.info({
-          heading: this.heading,
-          body: this.body,
-          duration: this.duration,
-          clickToClose: this.clickToClose
-        });
-        break;
-    }
+    this.element = notify[this.type]({
+      heading: this.heading,
+      body: this.body,
+      duration: this.duration,
+      clickToClose: this.clickToClose
+    });
   }
-  remove() {
-    if (this.element) {
-      this.element.remove();
-    }
+
+  update(options: { heading?: string; body?: string }) {
+    if (!this.element) return;
+    updateNotification(this.element, options);
+  }
+
+  close() {
+    if (!this.element) return;
+    this.element.remove();
+    this.element = null;
   }
 }

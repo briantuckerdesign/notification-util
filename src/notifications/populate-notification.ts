@@ -1,5 +1,5 @@
 import { icons } from '../icons';
-import { notificationConfig } from '../config'; // Import the configuration
+import { config } from '../config'; // Import the configuration
 
 /**
  * Populates a given container with a notification element.
@@ -11,13 +11,7 @@ import { notificationConfig } from '../config'; // Import the configuration
  * @param {string} notificationId - A unique identifier for the notification, used for targeting the notification after creation.
  * @returns {HTMLElement} The newly created notification element.
  */
-export function populateNotification(
-  container,
-  type,
-  heading,
-  body,
-  notificationId
-) {
+export function populateNotification(container, type, heading, body, notificationId) {
   const {
     notificationClass,
     headingWrapperClass,
@@ -25,14 +19,12 @@ export function populateNotification(
     bodyClass,
     headingClass,
     progressBarClass
-  } = notificationConfig.classes;
+  } = config.classes;
 
   const notificationToInject = `
 <div nu_notification="${notificationId}" class="${notificationClass} is-${type}" >
   <div nu_heading-wrapper class="${headingWrapperClass}">
-    <div nu_notification-icon class="${iconClass} is-${type}"">${icons.get(
-    type
-  )}</div>
+    <div nu_notification-icon class="${iconClass} is-${type}"">${icons.get(type)}</div>
     <div nu_notification-heading="true" class="${headingClass}">${heading}</div>
   </div>
   <div nu_notification-body class="${bodyClass}">${body}</div>
@@ -40,9 +32,7 @@ export function populateNotification(
 </div>`;
 
   container.insertAdjacentHTML('beforeend', notificationToInject);
-  const notification = container.querySelector(
-    `[nu_notification="${notificationId}"]`
-  );
+  const notification = container.querySelector(`[nu_notification="${notificationId}"]`);
   const bodyElement = notification.querySelector('[nu_notification-body]');
   if (!body) bodyElement.style.display = 'none';
 

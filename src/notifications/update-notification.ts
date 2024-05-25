@@ -1,14 +1,16 @@
-import { getOptions } from '../notifications/options';
+import { getOptions } from './get-options';
 
-export function updateLoader(loader, userOptions: object) {
+export function updateNotification(notification, userOptions: object) {
   let { heading, body } = getOptions(userOptions);
 
   // Update the loader
-  const headingElement = loader.querySelector('[nu_notification-heading]');
+  const headingElement = notification.querySelector(
+    '[nu_notification-heading]'
+  );
   if (headingElement && heading) headingElement.innerHTML = heading;
 
   // Update the body
-  const bodyElement = loader.querySelector('[nu_notification-body]');
+  const bodyElement = notification.querySelector('[nu_notification-body]');
 
   if (bodyElement && body) {
     bodyElement.innerHTML = body;

@@ -6,6 +6,8 @@ import { getIcon } from './get-icon';
 import { warningIcon } from './warning';
 import { infoIcon } from './info';
 
+// Thank you Radix UI for the icons! <3
+
 export let icons = {
   get: getIcon,
   svg: {

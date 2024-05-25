@@ -1,41 +1,41 @@
 /**
- * The Loader class is designed to manage the lifecycle of a loading indicator on the webpage.
- * It encapsulates the functionality to start, update, and close the loader with customizable options.
+ * The Loader class manages the lifecycle of a loading indicator on the webpage.
+ * It provides methods to initialize, update, and close the loader with customizable text options.
  *
- * - `element`: A private property that holds the HTML element of the loader. Initially, it is null.
+ * Private Properties:
+ * - `element`: Holds the HTML element of the loader. It is `null` when the loader is not displayed.
  *
- * The class provides three main methods:
- * - `constructor(options: { heading: string; body?: string })`: Initializes the loader. If the `element` property is null,
- *   it calls the `startLoader` function with the provided options to create and display the loader element.
- * - `update(options: { heading?: string; body?: string })`: Updates the loader's appearance or body. If the loader is already
- *   displayed (`element` is not null), it calls the `updateLoader` function with the new options.
- * - `close()`: Removes the loader from the display. If the loader is currently displayed (`element` is not null),
- *   it removes the loader element from the DOM.
+ * Methods:
+ * - `constructor(options: { heading: string; body?: string })`: Initializes the loader with a spinner notification.
+ *   It creates and displays the loader element using the `createNotification` function if `element` is `null`.
+ * - `update(options: { heading?: string; body?: string })`: Updates the loader's heading or body text.
+ *   If `element` is not `null`, it calls `updateNotification` with the new options to modify the loader's display.
+ * - `close()`: Removes the loader from the display. If `element` is not `null`, it removes the loader element from the DOM
+ *   and resets `element` to `null`.
  *
- * The class relies on two external functions imported from the same directory:
- * - `startLoader`: A function to create and display the loader element based on the provided options.
- * - `updateLoader`: A function to update the existing loader element with new options.
+ * External Dependencies:
+ * - `createNotification`: Creates and displays the loader element with a spinner and the provided options.
+ * - `updateNotification`: Updates the loader element's display with new options.
  */
-import { startLoader } from './loader/start-loader';
-import { updateLoader } from './loader/update-loader';
+
+import { createNotification } from './notifications/create-notification';
+import { updateNotification } from './notifications/update-notification';
 
 export class Loader {
   private element: HTMLElement | null = null;
 
   constructor(options: { heading: string; body?: string }) {
-    if (!this.element) {
-      this.element = startLoader(options);
-    }
+    this.element = createNotification('spinner', options);
   }
 
   update(options: { heading?: string; body?: string }) {
     if (!this.element) return;
-    updateLoader(this.element, options);
+    updateNotification(this.element, options);
   }
 
   close() {
-    if (this.element) {
-      this.element.remove();
-    }
+    if (!this.element) return;
+    this.element.remove();
+    this.element = null;
   }
 }

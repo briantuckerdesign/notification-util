@@ -1,16 +1,16 @@
-import { configureNotifications, notificationConfig } from './config';
-import { Loader } from './loader';
-import { Notification } from './notification';
+import { configure, config } from './config';
+import { Loader } from './Loader';
+import { Notification } from './Notification';
 
 declare global {
   interface Window {
-    notificationUtil: any;
+    notifyUtil: any;
   }
 }
 
-window.notificationUtil = {
+window.notifyUtil = {
   Loader,
   Notification,
-  configureNotifications,
-  notificationConfig
+  configure,
+  config
 };

@@ -1,5 +1,10 @@
-import { configureNotifications, notificationConfig } from './config';
-import { Loader } from './loader';
-import { Notification } from './notification';
+import { configure, config } from './config';
+import { Loader } from './Loader';
+import { Notification } from './Notification';
 
-export { Loader, Notification, configureNotifications, notificationConfig };
+export default {
+  Loader,
+  Notification,
+  configure,
+  config
+};
