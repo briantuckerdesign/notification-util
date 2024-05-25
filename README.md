@@ -2,9 +2,12 @@
 
 Very simple notification system for JS/TS projects.
 
-## Installation
+## Installation via NPM
 
 `npm i notify-util`
+
+Alternatively, you can include the bundled js file in `dist`, where `notifyUtil` is available in the window.
+
 
 ## Quick start
 
