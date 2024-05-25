@@ -28,7 +28,7 @@ To run without customization, pass an empty object as argument.
 
 You can override any of default settings by following the structure below.
 
-![Notifiation dissection](./src/images/Notification%20breakdown.png)
+![Notifiation dissection](./src/assets/Notification%20breakdown.png)
 
 | Option                | Description                                                                                     |
 | --------------------- | ----------------------------------------------------------------------------------------------- |

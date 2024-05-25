@@ -1,10 +1,4 @@
-// Default options
-export const defaultOptions = {
-  heading: '', // Required
-  message: '',
-  duration: 3500,
-  clickToClose: true
-};
+import { defaultOptions } from './default-options';
 
 /**
  * Merges user-defined options with default notification options and ensures a heading is provided.
@@ -21,8 +15,8 @@ export const defaultOptions = {
 export function getOptions(userOptions: any) {
   let options = { ...defaultOptions, ...userOptions };
   let heading = options.heading;
-  let message = options.message;
+  let body = options.body;
   let duration = options.duration;
   let clickToClose = options.clickToClose;
-  return { heading, message, duration, clickToClose };
+  return { heading, body, duration, clickToClose };
 }

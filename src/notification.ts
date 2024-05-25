@@ -1,12 +1,12 @@
 /**
  * The Notification class is designed to create and manage custom notification elements.
  * It supports different types of notifications such as success, error, warning, and debug,
- * each with customizable properties like heading, message, duration, and click-to-close functionality.
+ * each with customizable properties like heading, body, duration, and click-to-close functionality.
  *
  * - `element`: Holds the HTML element of the notification, initially null.
  * - `type`: Specifies the type of notification (e.g., success, error).
  * - `heading`: The text displayed as the heading of the notification.
- * - `message`: The main content or message of the notification.
+ * - `body`: The main content or body of the notification.
  * - `duration`: How long the notification will be displayed before automatically closing.
  * - `clickToClose`: Allows the notification to be closed on click if set to true.
  *
@@ -16,67 +16,47 @@
  * The `remove` method allows for the manual removal of the notification's element from the DOM.
  */
 import { notify } from './notifications';
-import { defaultOptions } from './notifications/options';
+import { defaultOptions } from './notifications/default-options';
+import { updateNotification } from './notifications/update-notification';
 
 export class Notification {
   private element: HTMLElement | null = null;
 
   type: string;
   heading: string;
-  message: string;
+  body: string;
   duration: number;
   clickToClose: boolean;
 
   constructor({
     type,
     heading,
-    message = '',
+    body = '',
     duration = defaultOptions.duration,
     clickToClose = defaultOptions.clickToClose
   }) {
     this.type = type;
     this.heading = heading;
-    this.message = message;
+    this.body = body;
     this.duration = duration;
     this.clickToClose = clickToClose;
 
-    switch (this.type) {
-      case 'success':
-        this.element = notify.success({
-          heading: this.heading,
-          message: this.message,
-          duration: this.duration,
-          clickToClose: this.clickToClose
-        });
-        break;
-      case 'error':
-        this.element = notify.error({
-          heading: this.heading,
-          message: this.message,
-          duration: this.duration,
-          clickToClose: this.clickToClose
-        });
-        break;
-      case 'warning':
-        this.element = notify.warning({
-          heading: this.heading,
-          message: this.message,
-          duration: this.duration,
-          clickToClose: this.clickToClose
-        });
-        break;
-      case 'debug':
-        this.element = notify.debug({
-          heading: this.heading,
-          message: this.message,
-          duration: this.duration,
-          clickToClose: this.clickToClose
-        });
-    }
+    this.element = notify[this.type]({
+      heading: this.heading,
+      body: this.body,
+      duration: this.duration,
+      clickToClose: this.clickToClose
+    });
   }
-  remove() {
-    if (this.element) {
-      this.element.remove();
-    }
+
+  update(options: { heading?: string; body?: string }) {
+    if (!this.element) return;
+    updateNotification(this.element, options);
+  }
+
+  close() {
+    if (!this.element) return;
+    this.element.remove();
+    this.element = null;
   }
 }

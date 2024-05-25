@@ -1,234 +1,288 @@
 (() => {
-const defaultCss = `
-body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-      Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
-      sans-serif, sans-serif;
-  }
-  :root {
-    --sn-red: #ff005d;
-    --sn-red-light: #ffebef;
-    --sn-green: #00c465;
-    --sn-green-light: #e3fff1;
-    --sn-yellow: #e0b300;
-    --sn-yellow-light: #fdf8e9;
-    --sn-blue: #0077ff;
-    --sn-blue-light: #e9f4ff;
-    --sn-grey-light: #e3e3e3;
-    --sn-grey: #74717b;
-    --sn-white: #fff;
-    --sn-black: #000;
-  }
-  .sn_notification {
-    z-index: 99999;
-    display: flex;
-    width: 16rem;
-    min-height: 1rem;
-    padding: 0.75rem;
-    flex-direction: column;
-    justify-content: center;
-    flex-wrap: nowrap;
-    align-items: flex-start;
-    grid-column-gap: 0.5rem;
-    grid-row-gap: 0.5rem;
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 0.25rem;
-    box-shadow: 0 2px 0.8rem -0.2rem hsla(245.45454545454544, 9.57%, 22.55%, 0.5);
-    pointer-events: auto;
-    transition-property: opacity;
-    transition-duration: 200ms;
-    transition-timing-function: ease;
-    overflow: hidden;
-    position: relative;
-  }
-  .sn_notification.is-success {
-    border-color: var(--sn-green);
-    background-color: var(--sn-green-light);
-  }
-
-  .sn_notification.is-error {
-    border-color: var(--sn-red);
-    background-color: var(--sn-red-light);
-    color: var(--sn-black);
-  }
-
-  .sn_notification.is-warning {
-    border-color: var(--sn-yellow);
-    background-color: var(--sn-yellow-light);
-  }
-
-  .sn_notification.is-debug {
-    border-color: var(--sn-blue);
-    background-color: var(--sn-blue-light);
-  }
-
-  .sn_notification.is-loading {
-    border-color: var(--sn-grey-light);
-    background-color: var(--sn-grey);
-    color: var(--sn-white);
-  }
-  .sn_spinner {
-    margin-top: 5px;
-    width: 18px;
-    height: 18px;
-    border: 2px solid var(--sn-grey-light);
-    border-bottom-color: transparent;
-    border-radius: 50%;
-    display: inline-block;
-    box-sizing: border-box;
-    animation: rotation 1s linear infinite;
-  }
-
-  @keyframes rotation {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-  .sn_notification-wrapper {
-    position: fixed;
-    top: 0.5rem;
-    right: 0.5rem;
-    z-index: 9998;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    grid-column-gap: 0.5rem;
-    grid-row-gap: 0.5rem;
-    pointer-events: none;
-  }
-  .sn_notification-heading-wrapper {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    grid-column-gap: 0.5rem;
-    grid-row-gap: 0.5rem;
-  }
-  .sn_notification-icon {
-    display: flex;
-    width: 1rem;
-    height: 1rem;
-    justify-content: center;
-    align-items: center;
-  }
-  .sn_notification-heading {
-    font-size: 0.875rem;
-    font-weight: 600;
-  }
-  .sn_notification-message {
-    font-size: 0.875rem;
-  }
-  .sn_notification-duration {
-    width: 0%;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 0.125rem;
-    background-color: var(--sn-black);
-    opacity: 0.15;
-  }
-  @keyframes growWidth {
-    from {
-      width: 0%;
-    }
-    to {
-      width: 100%;
-    }
-  }
-`;
-function injectCss() {
-  const style = document.createElement("style");
-  style.innerHTML = defaultCss;
-  document.head.appendChild(style);
-}
-const debugIcon = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--bx" 
-	width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
-	<path fill="#0077ff" d="m16.895 6.519l2.813-2.812l-1.414-1.414l-2.846 2.846a6.575 6.575 0 0 0-.723-.454a5.778 5.778 0 0 0-5.45 0c-.25.132-.488.287-.722.453L5.707 2.293L4.293 3.707l2.813 2.812A8.473 8.473 0 0 0 5.756 9H2v2h2.307c-.065.495-.107.997-.107 1.5c0 .507.042 1.013.107 1.511H2v2h2.753c.013.039.021.08.034.118c.188.555.421 1.093.695 1.6c.044.081.095.155.141.234l-2.33 2.33l1.414 1.414l2.11-2.111a7.477 7.477 0 0 0 2.068 1.619c.479.253.982.449 1.496.58a6.515 6.515 0 0 0 3.237.001a6.812 6.812 0 0 0 1.496-.58c.465-.246.914-.55 1.333-.904c.258-.218.5-.462.734-.716l2.111 2.111l1.414-1.414l-2.33-2.33c.047-.08.098-.155.142-.236c.273-.505.507-1.043.694-1.599c.013-.039.021-.079.034-.118H22v-2h-2.308c.065-.499.107-1.004.107-1.511c0-.503-.042-1.005-.106-1.5H22V9h-3.756a8.494 8.494 0 0 0-1.349-2.481zM8.681 7.748c.445-.558.96-.993 1.528-1.294a3.773 3.773 0 0 1 3.581 0a4.894 4.894 0 0 1 1.53 1.295c.299.373.54.8.753 1.251H7.927c.214-.451.454-.879.754-1.252zM17.8 12.5c0 .522-.042 1.044-.126 1.553c-.079.49-.199.973-.355 1.436a8.28 8.28 0 0 1-.559 1.288a7.59 7.59 0 0 1-.733 1.11c-.267.333-.56.636-.869.898c-.31.261-.639.484-.979.664s-.695.317-1.057.41c-.04.01-.082.014-.122.023V14h-2v5.881c-.04-.009-.082-.013-.122-.023c-.361-.093-.717-.23-1.057-.41s-.669-.403-.978-.664a6.462 6.462 0 0 1-.871-.899a7.402 7.402 0 0 1-.731-1.108a8.337 8.337 0 0 1-.56-1.289a9.075 9.075 0 0 1-.356-1.438A9.61 9.61 0 0 1 6.319 11H17.68c.079.491.12.995.12 1.5z"></path>
-</svg>
-`;
-const errorIcon = `
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" 
-	class="iconify iconify--bx" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
-	<path fill="#ff005d" d="M11.953 2C6.465 2 2 6.486 2 12s4.486 10 10 10s10-4.486 10-10S17.493 2 11.953 2zM12 20c-4.411 0-8-3.589-8-8s3.567-8 7.953-8C16.391 4 20 7.589 20 12s-3.589 8-8 8z"></path>
-	<path fill="#ff005d" d="M11 7h2v7h-2zm0 8h2v2h-2z"></path>
-</svg>`;
-const loadingIcon = `<div><span class="sn_spinner"></span></div>`;
-const successIcon = `
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" 
-	class="iconify iconify--bx" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
-	<path fill="#00c465" d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10s10-4.486 10-10S17.514 2 12 2m0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8s8 3.589 8 8s-3.589 8-8 8"></path>
-	<path fill="#00c465" d="M9.999 13.587L7.7 11.292l-1.412 1.416l3.713 3.705l6.706-6.706l-1.414-1.414z"></path>
-</svg>`;
+const debugIcon = `<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_2102_1592)"><path d="M12 7.5C12 5.84315 10.6569 4.5 9 4.5C7.34315 4.5 6 5.84315 6 7.5V12C6 13.6569 7.34315 15 9 15C10.6569 15 12 13.6569 12 12V7.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M14.25 5.25L12 6.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.75 5.25L6 6.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M14.25 14.25L12 12.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.75 14.25L6 12.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 9.75H12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 9.75H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.5 3L8.25 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.5 3L9.75 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></g><defs><clipPath id="clip0_2102_1592"><rect width="18" height="18" fill="white"/></clipPath></defs></svg>`;
+const errorIcon = `<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_2102_1582)"><g clip-path="url(#clip1_2102_1582)"><path d="M9 16.5C13.1421 16.5 16.5 13.1421 16.5 9C16.5 4.85786 13.1421 1.5 9 1.5C4.85786 1.5 1.5 4.85786 1.5 9C1.5 13.1421 4.85786 16.5 9 16.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.25 6.75L6.75 11.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.75 6.75L11.25 11.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></g></g><defs><clipPath id="clip0_2102_1582"><rect width="18" height="18" fill="white"/></clipPath><clipPath id="clip1_2102_1582"><rect width="18" height="18" fill="white"/></clipPath></defs></svg>`;
+const spinnerIcon = `<div></div>`;
+const successIcon = `<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_2102_1564)"><g clip-path="url(#clip1_2102_1564)"><path d="M16.5 8.30999V8.99999C16.4991 10.6173 15.9754 12.191 15.007 13.4864C14.0386 14.7817 12.6775 15.7293 11.1265 16.1879C9.57557 16.6465 7.91794 16.5914 6.40085 16.0309C4.88376 15.4704 3.58849 14.4346 2.70822 13.0778C1.82795 11.721 1.40984 10.116 1.51626 8.50223C1.62267 6.88841 2.24791 5.35223 3.29871 4.12279C4.34951 2.89335 5.76959 2.03653 7.34714 1.6801C8.92469 1.32367 10.5752 1.48674 12.0525 2.14499" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.5 3L9 10.5075L6.75 8.2575" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></g></g><defs><clipPath id="clip0_2102_1564"><rect width="18" height="18" fill="white"/></clipPath><clipPath id="clip1_2102_1564"><rect width="18" height="18" fill="white"/></clipPath></defs></svg>`;
 function getIcon(type) {
   let iconHTML;
   switch (type) {
     case "success":
-      iconHTML = notificationConfig.icons.success;
+      iconHTML = config.icons.success;
       break;
     case "debug":
-      iconHTML = notificationConfig.icons.debug;
+      iconHTML = config.icons.debug;
       break;
     case "error":
-      iconHTML = notificationConfig.icons.error;
+      iconHTML = config.icons.error;
       break;
     case "warning":
-      iconHTML = notificationConfig.icons.warning;
+      iconHTML = config.icons.warning;
       break;
-    case "loading":
-      iconHTML = notificationConfig.icons.loading;
+    case "spinner":
+      iconHTML = config.icons.spinner;
+      break;
+    case "info":
+      iconHTML = config.icons.info;
       break;
   }
   return iconHTML;
 }
-const warningIcon = `
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" 
-	class="iconify iconify--bx" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
-	<path fill="#e0b300" d="M11.001 10h2v5h-2zM11 16h2v2h-2z"></path>
-	<path fill="#e0b300" d="M13.768 4.2C13.42 3.545 12.742 3.138 12 3.138s-1.42.407-1.768 1.063L2.894 18.064a1.986 1.986 0 0 0 .054 1.968A1.984 1.984 0 0 0 4.661 21h14.678c.708 0 1.349-.362 1.714-.968a1.989 1.989 0 0 0 .054-1.968L13.768 4.2zM4.661 19L12 5.137L19.344 19H4.661z">
-	</path>
-</svg>`;
-let icons = {
+const warningIcon = `<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_2102_1587)"><path d="M16.2976 13.5L10.2976 3C10.1667 2.76915 9.97702 2.57714 9.74776 2.44355C9.5185 2.30996 9.25791 2.23958 8.99257 2.23958C8.72723 2.23958 8.46664 2.30996 8.23738 2.44355C8.00812 2.57714 7.8184 2.76915 7.68757 3L1.68757 13.5C1.55533 13.729 1.48599 13.9889 1.48658 14.2534C1.48716 14.5178 1.55765 14.7774 1.6909 15.0059C1.82416 15.2343 2.01543 15.4234 2.24534 15.5541C2.47525 15.6848 2.73562 15.7524 3.00007 15.75H15.0001C15.2632 15.7497 15.5217 15.6802 15.7495 15.5485C15.9773 15.4167 16.1665 15.2273 16.298 14.9993C16.4294 14.7714 16.4986 14.5128 16.4985 14.2496C16.4985 13.9864 16.4292 13.7279 16.2976 13.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 6.75V9.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12.75H9.0075" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></g><defs><clipPath id="clip0_2102_1587"><rect width="18" height="18" fill="white"/></clipPath></defs></svg>`;
+const infoIcon = `<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_2102_1792)"><path d="M9 16.5C13.1421 16.5 16.5 13.1421 16.5 9C16.5 4.85786 13.1421 1.5 9 1.5C4.85786 1.5 1.5 4.85786 1.5 9C1.5 13.1421 4.85786 16.5 9 16.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 6H9.0075" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></g><defs><clipPath id="clip0_2102_1792"><rect width="18" height="18" fill="white"/></clipPath></defs></svg>`;
+let icons$1 = {
   get: getIcon,
   svg: {
     success: successIcon,
     warning: warningIcon,
     error: errorIcon,
     debug: debugIcon,
-    loading: loadingIcon
+    spinner: spinnerIcon,
+    info: infoIcon
   }
 };
-const notificationConfig = {
-  containerSelector: "[sn-notification-container]",
-  classes: {
-    notificationClass: "sn_notification",
-    headingWrapperClass: "sn_notification-heading-wrapper",
-    iconClass: "sn_notification-icon",
-    messageClass: "sn_notification-message",
-    headingClass: "sn_notification-heading",
-    durationClass: "sn_notification-duration"
-  },
-  icons: {
-    success: icons.svg.success,
-    warning: icons.svg.warning,
-    error: icons.svg.error,
-    debug: icons.svg.debug,
-    loading: icons.svg.loading
-  },
-  injectCss: true
-};
-function configureNotifications(options) {
-  const safeOptions = validateAndMergeOptions(options);
-  deepMerge(notificationConfig, safeOptions);
-  if (notificationConfig.injectCss) {
-    injectCss();
+const darkStyles = `
+:root {
+  --nu--background: var(--nu-slate-800);
+  --nu--text: var(--nu-slate-300);
+  --nu--heading: var(--nu-slate-50);
+  --nu--border: var(--nu-slate-700);
+  --nu-progress-bar: var(--nu-slate-500);
+
+  --nu-success-icon: var(--nu-green-500);
+  --nu-success-border: var(--nu-green-600);
+
+  --nu-error-icon: var(--nu-red-500);
+  --nu-error-border: var(--nu-red-500);
+
+  --nu-warning-icon: var(--nu-yellow-500);
+  --nu-warning-border: var(--nu-yellow-400);
+
+  --nu-info-icon: var(--nu-slate-400);
+  --nu-info-border: var(--nu-slate-700);
+
+  --nu-debug-icon: var(--nu-blue-300);
+  --nu-debug-border: var(--nu-blue-600);
+
+  --nu-spinner-icon: var(--nu-slate-400);
+  --nu-spinner-border: var(--nu-slate-400);
+}`;
+const lightStyles = `
+:root {
+  --nu--background: var(--nu-white);
+  --nu--text: var(--nu-slate-600);
+  --nu--heading: var(--nu-slate-800);
+  --nu--border: var(--nu-slate-200);
+  --nu-progress-bar: var(--nu-slate-300);
+
+  --nu-success-icon: var(--nu-green-600);
+  --nu-success-border: var(--nu-green-600);
+
+  --nu-error-icon: var(--nu-red-500);
+  --nu-error-border: var(--nu-red-500);
+
+  --nu-warning-icon: var(--nu-yellow-500);
+  --nu-warning-border: var(--nu-yellow-400);
+
+  --nu-info-icon: var(--nu-slate-500);
+  --nu-info-border: var(--nu-slate-200);
+
+  --nu-debug-icon: var(--nu-blue-600);
+  --nu-debug-border: var(--nu-blue-600);
+
+  --nu-spinner-icon: var(--nu-slate-500);
+  --nu-spinner-border: var(--nu-slate-400);
+}
+`;
+const autoStyles = `
+${lightStyles}
+@media (prefers-color-scheme: dark) {
+    ${darkStyles}
+}
+`;
+const swatches = `
+:root {
+    --nu-white: #ffffff;
+    --nu-slate-50: #f8fafc;
+    --nu-slate-200: #e2e8f0;
+    --nu-slate-300: #cbd5e1;
+    --nu-slate-400: #94a3b8;
+    --nu-slate-500: #64748b;
+    --nu-slate-600: #475569;
+    --nu-slate-700: #334155;
+    --nu-slate-800: #1e293b;
+    --nu-black: #000000;
+  
+    --nu-green-500: #22c55e;
+    --nu-green-600: #16a34a;
+    --nu-red-500: #ef4444;
+    --nu-yellow-400: #facc15;
+    --nu-yellow-500: #eab308;
+    --nu-blue-300: #93c5fd;
+    --nu-blue-600: #2563eb;
+  }
+`;
+const animations = `
+@keyframes nu_progress-bar {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
   }
 }
-function validateAndMergeOptions(userOptions, defaults) {
-  return userOptions;
+@keyframes nu_spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
+`;
+const icons = `
+.nu_notification-icon {
+    display: flex;
+    width: 1rem;
+    height: 1rem;
+    justify-content: center;
+    align-items: center;
+  }
+  .nu_notification-icon.is-success {
+    color: var(--nu-success-icon);
+  }
+  .nu_notification-icon.is-warning {
+    color: var(--nu-warning-icon);
+  }
+  .nu_notification-icon.is-info {
+    color: var(--nu-info-icon);
+  }
+  .nu_notification-icon.is-error {
+    color: var(--nu-error-icon);
+  }
+  .nu_notification-icon.is-debug {
+    color: var(--nu-debug-icon);
+  }
+  .nu_notification-icon.is-spinner {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid var(--nu-spinner-icon);
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: nu_spinner 1s linear infinite;
+  }
+`;
+const notificationTypes = `
+.nu_notification.is-info {
+    border-top-color: var(--nu-info-border);
+  }
+  
+  .nu_notification.is-success {
+    border-top-color: var(--nu-success-border);
+  }
+  
+  .nu_notification.is-error {
+    border-top-color: var(--nu-error-border);
+  }
+  
+  .nu_notification.is-warning {
+    border-top-color: var(--nu-warning-border);
+  }
+  
+  .nu_notification.is-debug {
+    border-top-color: var(--nu-debug-border);
+  }
+  
+  .nu_notification.is-spinner {
+    border-top-color: var(--nu-spinner-border);
+  }
+`;
+const notificationBase = `
+.nu_notification {
+    position: relative;
+    z-index: 99999;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1rem;
+    width: 16rem;
+    min-height: 1rem;
+    padding: 1.25rem 1.5rem 1.5rem 1.5rem;
+    pointer-events: auto;
+    transition-property: opacity;
+    transition-duration: 200ms;
+    transition-timing-function: ease;
+    box-shadow: 0rem 0.25rem 0.75rem 0rem hsla(0, 0%, 0%, 0.09);
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    background-color: var(--nu--background);
+    border-color: var(--nu--border);
+    border-style: solid;
+    border-width: 1px;
+    border-top-width: 0.5rem;
+  }
+  
+  .nu_notification-heading-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .nu_notification-heading {
+    font-weight: 500;
+    color: var(--nu--heading);
+  }
+  
+  .nu_notification-body {
+    font-weight: 400;
+    color: var(--nu--text);
+  }
+  
+  .nu_notification-progress-bar {
+    width: 0%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 0.2rem;
+    background-color: var(--nu-progress-bar);
+  }
+`;
+const baseStyles = `
+${swatches}
+${notificationBase}
+${notificationTypes}
+${animations}
+${icons}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif,
+    sans-serif;
+}
+
+.nu_notification-container {
+  position: fixed; 
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  grid-column-gap: 0.5rem;
+  grid-row-gap: 0.5rem;
+  pointer-events: none;
+}`;
+const styles = {
+  base: baseStyles,
+  light: lightStyles,
+  dark: darkStyles,
+  auto: autoStyles
+};
 function deepMerge(target, source) {
   Object.keys(source).forEach((key) => {
     if (source[key] && typeof source[key] === "object" && !(source[key] instanceof Array)) {
@@ -241,38 +295,85 @@ function deepMerge(target, source) {
     }
   });
 }
-const defaultOptions = {
-  heading: "",
-  // Required
-  message: "",
-  duration: 3500,
-  clickToClose: true
+function injectCss(...cssStrings) {
+  const style = document.createElement("style");
+  style.innerHTML = cssStrings.join("");
+  document.head.appendChild(style);
+}
+const config = {
+  containerSelector: "[nu_notification-container]",
+  classes: {
+    notificationClass: "nu_notification",
+    headingWrapperClass: "nu_notification-heading-wrapper",
+    iconClass: "nu_notification-icon",
+    headingClass: "nu_notification-heading",
+    bodyClass: "nu_notification-body",
+    progressBarClass: "nu_notification-progress-bar"
+  },
+  icons: {
+    success: icons$1.svg.success,
+    warning: icons$1.svg.warning,
+    error: icons$1.svg.error,
+    debug: icons$1.svg.debug,
+    spinner: icons$1.svg.spinner,
+    info: icons$1.svg.info
+  },
+  theme: "light"
 };
-function getOptions(userOptions) {
-  let options = { ...defaultOptions, ...userOptions };
-  let heading = options.heading;
-  let message = options.message;
-  let duration = options.duration;
-  let clickToClose = options.clickToClose;
-  return { heading, message, duration, clickToClose };
+function configure(options) {
+  deepMerge(config, options);
+  switch (config.theme) {
+    case "none":
+      break;
+    case "light":
+      injectCss(styles.light, styles.base);
+      break;
+    case "dark":
+      injectCss(styles.dark, styles.base);
+      break;
+    case "auto":
+      injectCss(styles.auto, styles.base);
+      break;
+  }
 }
 function closeNotification(notification, duration) {
+  let closeTimeout;
   if (duration > 0) {
-    const durationElement = notification.querySelector(
-      "[sn-notification-duration]"
+    const progressElement = notification.querySelector(
+      "[nu_notification-progress-bar]"
     );
-    if (durationElement) {
-      durationElement.style.animationName = "growWidth";
-      durationElement.style.animationDuration = `${duration}ms`;
-      durationElement.style.animationTimingFunction = "linear";
-      durationElement.style.animationFillMode = "forwards";
+    if (progressElement) {
+      progressElement.style.animationName = "nu_progress-bar";
+      progressElement.style.animationDuration = `${duration}ms`;
+      progressElement.style.animationTimingFunction = "linear";
+      progressElement.style.animationFillMode = "forwards";
     }
+    notification.addEventListener("mouseover", () => {
+      if (progressElement) {
+        progressElement.style.animationPlayState = "paused";
+      }
+      clearTimeout(closeTimeout);
+    });
+    notification.addEventListener("mouseout", () => {
+      if (progressElement) {
+        progressElement.style.animationPlayState = "running";
+      }
+      closeTimeout = setTimeout(() => {
+        notification.style.opacity = "0";
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+          }
+        }, 250);
+      }, duration);
+    });
   }
-  setTimeout(() => {
+  closeTimeout = setTimeout(() => {
     notification.style.opacity = "0";
     setTimeout(() => {
-      if (notification.parentNode)
+      if (notification.parentNode) {
         notification.parentNode.removeChild(notification);
+      }
     }, 250);
   }, duration);
 }
@@ -283,45 +384,60 @@ function enableClickToClose(notification) {
     () => closeNotification(notification, 0)
   );
 }
-function populateNotification(container, type, heading, message, notificationId) {
+function populateNotification(container, type, heading, body, notificationId) {
   const {
     notificationClass,
     headingWrapperClass,
     iconClass,
-    messageClass,
+    bodyClass,
     headingClass,
-    durationClass
-  } = notificationConfig.classes;
+    progressBarClass
+  } = config.classes;
   const notificationToInject = `
-<div sn-notification="${notificationId}" class="${notificationClass} is-${type}" >
-  <div sn-heading-wrapper class="${headingWrapperClass}">
-    <div sn-notification-icon class="${iconClass}">${icons.get(type)}</div>
-    <div sn-notification-heading="true" class="${headingClass}">${heading}</div>
+<div nu_notification="${notificationId}" class="${notificationClass} is-${type}" >
+  <div nu_heading-wrapper class="${headingWrapperClass}">
+    <div nu_notification-icon class="${iconClass} is-${type}"">${icons$1.get(type)}</div>
+    <div nu_notification-heading="true" class="${headingClass}">${heading}</div>
   </div>
-  <div sn-notification-message class="${messageClass}">${message}</div>
-  <div sn-notification-duration class="${durationClass}"></div>
+  <div nu_notification-body class="${bodyClass}">${body}</div>
+  <div nu_notification-progress-bar class="${progressBarClass}"></div>
 </div>`;
   container.insertAdjacentHTML("beforeend", notificationToInject);
-  const notification = container.querySelector(
-    `[sn-notification="${notificationId}"]`
-  );
-  const messageElement = notification.querySelector(
-    "[sn-notification-message]"
-  );
-  if (!message)
-    messageElement.style.display = "none";
+  const notification = container.querySelector(`[nu_notification="${notificationId}"]`);
+  const bodyElement = notification.querySelector("[nu_notification-body]");
+  if (!body)
+    bodyElement.style.display = "none";
   return notification;
 }
-function createNotification(type, heading, message, duration, clickToClose) {
-  const container = document.querySelector(
-    notificationConfig.containerSelector
-  );
+const defaultOptions = {
+  heading: "",
+  // Required
+  body: "",
+  duration: 3500,
+  // in ms, null for infinite
+  clickToClose: true
+};
+function getOptions(userOptions) {
+  let options = { ...defaultOptions, ...userOptions };
+  let heading = options.heading;
+  let body = options.body;
+  let duration = options.duration;
+  let clickToClose = options.clickToClose;
+  return { heading, body, duration, clickToClose };
+}
+function createNotification(type, userOptions) {
+  let { heading, body, duration, clickToClose } = getOptions(userOptions);
+  if (type === "spinner") {
+    duration = null;
+    clickToClose = false;
+  }
+  const container = document.querySelector(config.containerSelector);
   const notificationId = Math.random().toString(36).substring(2, 11);
   const notification = populateNotification(
     container,
     type,
     heading,
-    message,
+    body,
     notificationId
   );
   container.appendChild(notification);
@@ -332,134 +448,83 @@ function createNotification(type, heading, message, duration, clickToClose) {
     enableClickToClose(notification);
   return notification;
 }
-function startLoader(userOptions) {
-  let { heading, message } = getOptions(userOptions);
-  return createNotification("loading", heading, message, null, false);
-}
-function updateLoader(loader, userOptions) {
-  let { heading, message } = getOptions(userOptions);
-  const headingElement = loader.querySelector("[sn-notification-heading]");
+function updateNotification(notification, userOptions) {
+  let { heading, body } = getOptions(userOptions);
+  const headingElement = notification.querySelector(
+    "[nu_notification-heading]"
+  );
   if (headingElement && heading)
     headingElement.innerHTML = heading;
-  const messageElement = loader.querySelector("[sn-notification-message]");
-  if (messageElement && message) {
-    messageElement.innerHTML = message;
-    messageElement.style.display = "block";
+  const bodyElement = notification.querySelector("[nu_notification-body]");
+  if (bodyElement && body) {
+    bodyElement.innerHTML = body;
+    bodyElement.style.display = "block";
   } else {
-    messageElement.innerHTML = "";
-    messageElement.style.display = "none";
+    bodyElement.innerHTML = "";
+    bodyElement.style.display = "none";
   }
 }
 class Loader {
   constructor(options) {
     this.element = null;
-    if (!this.element) {
-      this.element = startLoader(options);
-    }
+    this.element = createNotification("spinner", options);
   }
   update(options) {
     if (!this.element)
       return;
-    updateLoader(this.element, options);
+    updateNotification(this.element, options);
   }
   close() {
-    if (this.element) {
-      this.element.remove();
-    }
+    if (!this.element)
+      return;
+    this.element.remove();
+    this.element = null;
   }
 }
 const notify = {
-  success,
-  error,
-  warning,
-  debug
+  success: (options) => createNotification("success", options),
+  error: (options) => createNotification("error", options),
+  warning: (options) => createNotification("warning", options),
+  debug: (options) => createNotification("debug", options),
+  info: (options) => createNotification("info", options)
 };
-function success(userOptions) {
-  let { heading, message, duration, clickToClose } = getOptions(userOptions);
-  return createNotification(
-    "success",
-    heading,
-    message,
-    duration,
-    clickToClose
-  );
-}
-function error(userOptions) {
-  let { heading, message, duration, clickToClose } = getOptions(userOptions);
-  return createNotification("error", heading, message, duration, clickToClose);
-}
-function warning(userOptions) {
-  let { heading, message, duration, clickToClose } = getOptions(userOptions);
-  return createNotification(
-    "warning",
-    heading,
-    message,
-    duration,
-    clickToClose
-  );
-}
-function debug(userOptions) {
-  let { heading, message, duration, clickToClose } = getOptions(userOptions);
-  return createNotification("debug", heading, message, duration, clickToClose);
-}
 class Notification {
   constructor({
     type,
     heading,
-    message = "",
+    body = "",
     duration = defaultOptions.duration,
     clickToClose = defaultOptions.clickToClose
   }) {
     this.element = null;
     this.type = type;
     this.heading = heading;
-    this.message = message;
+    this.body = body;
     this.duration = duration;
     this.clickToClose = clickToClose;
-    switch (this.type) {
-      case "success":
-        this.element = notify.success({
-          heading: this.heading,
-          message: this.message,
-          duration: this.duration,
-          clickToClose: this.clickToClose
-        });
-        break;
-      case "error":
-        this.element = notify.error({
-          heading: this.heading,
-          message: this.message,
-          duration: this.duration,
-          clickToClose: this.clickToClose
-        });
-        break;
-      case "warning":
-        this.element = notify.warning({
-          heading: this.heading,
-          message: this.message,
-          duration: this.duration,
-          clickToClose: this.clickToClose
-        });
-        break;
-      case "debug":
-        this.element = notify.debug({
-          heading: this.heading,
-          message: this.message,
-          duration: this.duration,
-          clickToClose: this.clickToClose
-        });
-    }
+    this.element = notify[this.type]({
+      heading: this.heading,
+      body: this.body,
+      duration: this.duration,
+      clickToClose: this.clickToClose
+    });
   }
-  remove() {
-    if (this.element) {
-      this.element.remove();
-    }
+  update(options) {
+    if (!this.element)
+      return;
+    updateNotification(this.element, options);
+  }
+  close() {
+    if (!this.element)
+      return;
+    this.element.remove();
+    this.element = null;
   }
 }
-export {
+window.notifyUtil = {
   Loader,
   Notification,
-  configureNotifications,
-  notificationConfig
+  configure,
+  config
 };
 })()

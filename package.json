@@ -1,21 +1,17 @@
 {
-  "name": "notification-util",
-  "version": "1.0.8",
+  "name": "notify-util",
+  "version": "1.1.0",
   "main": "src/main.ts",
   "module": "src/main.ts",
   "type": "module",
-  "directories": {
-    "dist": "dist",
-    "src": "src"
-  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/briantuckerdesign/notification-utilTODO"
+    "url": "git+https://github.com/briantuckerdesign/notification-util"
   },
   "author": "Brian Tucker",
   "scripts": {
     "watch": "concurrently \"http-server dist -p 8080 -s\" \"vite build --watch\"",
-    "build": "vite build && node js-to-txt-util.cjs"
+    "build": "vite build"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",

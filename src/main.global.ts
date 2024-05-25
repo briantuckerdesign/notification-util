@@ -2,7 +2,13 @@ import { configure, config } from './config';
 import { Loader } from './Loader';
 import { Notification } from './Notification';
 
-export default {
+declare global {
+  interface Window {
+    notifyUtil: any;
+  }
+}
+
+window.notifyUtil = {
   Loader,
   Notification,
   configure,
