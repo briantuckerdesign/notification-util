@@ -1,12 +1,12 @@
 /**
  * The Notification class is designed to create and manage custom notification elements.
  * It supports different types of notifications such as success, error, warning, and debug,
- * each with customizable properties like heading, message, duration, and click-to-close functionality.
+ * each with customizable properties like heading, body, duration, and click-to-close functionality.
  *
  * - `element`: Holds the HTML element of the notification, initially null.
  * - `type`: Specifies the type of notification (e.g., success, error).
  * - `heading`: The text displayed as the heading of the notification.
- * - `message`: The main content or message of the notification.
+ * - `body`: The main content or body of the notification.
  * - `duration`: How long the notification will be displayed before automatically closing.
  * - `clickToClose`: Allows the notification to be closed on click if set to true.
  *
@@ -23,20 +23,20 @@ export class Notification {
 
   type: string;
   heading: string;
-  message: string;
+  body: string;
   duration: number;
   clickToClose: boolean;
 
   constructor({
     type,
     heading,
-    message = '',
+    body = '',
     duration = defaultOptions.duration,
     clickToClose = defaultOptions.clickToClose
   }) {
     this.type = type;
     this.heading = heading;
-    this.message = message;
+    this.body = body;
     this.duration = duration;
     this.clickToClose = clickToClose;
 
@@ -44,7 +44,7 @@ export class Notification {
       case 'success':
         this.element = notify.success({
           heading: this.heading,
-          message: this.message,
+          body: this.body,
           duration: this.duration,
           clickToClose: this.clickToClose
         });
@@ -52,7 +52,7 @@ export class Notification {
       case 'error':
         this.element = notify.error({
           heading: this.heading,
-          message: this.message,
+          body: this.body,
           duration: this.duration,
           clickToClose: this.clickToClose
         });
@@ -60,7 +60,7 @@ export class Notification {
       case 'warning':
         this.element = notify.warning({
           heading: this.heading,
-          message: this.message,
+          body: this.body,
           duration: this.duration,
           clickToClose: this.clickToClose
         });
@@ -68,10 +68,19 @@ export class Notification {
       case 'debug':
         this.element = notify.debug({
           heading: this.heading,
-          message: this.message,
+          body: this.body,
           duration: this.duration,
           clickToClose: this.clickToClose
         });
+        break;
+      case 'info':
+        this.element = notify.info({
+          heading: this.heading,
+          body: this.body,
+          duration: this.duration,
+          clickToClose: this.clickToClose
+        });
+        break;
     }
   }
   remove() {

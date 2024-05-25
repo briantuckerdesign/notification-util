@@ -6,13 +6,13 @@ export default defineConfig({
     emptyOutDir: true,
     minify: false,
     lib: {
-      entry: 'src/main.ts',
+      entry: 'src/main.global.ts',
       name: 'notification-util',
       formats: ['es'],
       fileName: 'main'
     },
     rollupOptions: {
-      input: 'src/main.ts',
+      input: 'src/main.global.ts',
       plugins: [
         {
           name: 'wrap-in-iife',

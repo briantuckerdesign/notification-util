@@ -1,24 +1,26 @@
-import { injectCss } from './defaultCss';
+import { autoModeCss, darkModeCss, defaultCss, injectCss } from './defaultCss';
 import { icons } from './icons';
 
 export const notificationConfig = {
-  containerSelector: '[sn-notification-container]',
+  containerSelector: '[nu_notification-container]',
   classes: {
-    notificationClass: 'sn_notification',
-    headingWrapperClass: 'sn_notification-heading-wrapper',
-    iconClass: 'sn_notification-icon',
-    messageClass: 'sn_notification-message',
-    headingClass: 'sn_notification-heading',
-    durationClass: 'sn_notification-duration'
+    notificationClass: 'nu_notification',
+    headingWrapperClass: 'nu_notification-heading-wrapper',
+    iconClass: 'nu_notification-icon',
+    headingClass: 'nu_notification-heading',
+    bodyClass: 'nu_notification-body',
+    progressBarClass: 'nu_notification-progress-bar'
   },
   icons: {
     success: icons.svg.success,
     warning: icons.svg.warning,
     error: icons.svg.error,
     debug: icons.svg.debug,
-    loading: icons.svg.loading
+    spinner: icons.svg.spinner,
+    info: icons.svg.info
   },
-  injectCss: true
+  injectCss: true,
+  theme: 'light'
 };
 
 // Import or define the DeepPartial type if you're using it inside the function for any reason.
@@ -34,7 +36,14 @@ export function configureNotifications(options: any) {
   deepMerge(notificationConfig, safeOptions);
 
   if (notificationConfig.injectCss) {
-    injectCss();
+    injectCss(defaultCss);
+    if (notificationConfig.theme === 'dark') {
+      injectCss(darkModeCss);
+      document.body.classList.add('nu_dark-mode');
+    }
+    if (notificationConfig.theme === 'auto') {
+      injectCss(autoModeCss);
+    }
   }
 }
 

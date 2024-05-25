@@ -23,8 +23,11 @@ export function getIcon(type: string): string {
     case 'warning':
       iconHTML = notificationConfig.icons.warning;
       break;
-    case 'loading':
-      iconHTML = notificationConfig.icons.loading;
+    case 'spinner':
+      iconHTML = notificationConfig.icons.spinner;
+      break;
+    case 'info':
+      iconHTML = notificationConfig.icons.info;
       break;
   }
 

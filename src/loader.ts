@@ -5,9 +5,9 @@
  * - `element`: A private property that holds the HTML element of the loader. Initially, it is null.
  *
  * The class provides three main methods:
- * - `constructor(options: { heading: string; message?: string })`: Initializes the loader. If the `element` property is null,
+ * - `constructor(options: { heading: string; body?: string })`: Initializes the loader. If the `element` property is null,
  *   it calls the `startLoader` function with the provided options to create and display the loader element.
- * - `update(options: { heading?: string; message?: string })`: Updates the loader's appearance or message. If the loader is already
+ * - `update(options: { heading?: string; body?: string })`: Updates the loader's appearance or body. If the loader is already
  *   displayed (`element` is not null), it calls the `updateLoader` function with the new options.
  * - `close()`: Removes the loader from the display. If the loader is currently displayed (`element` is not null),
  *   it removes the loader element from the DOM.
@@ -22,13 +22,13 @@ import { updateLoader } from './loader/update-loader';
 export class Loader {
   private element: HTMLElement | null = null;
 
-  constructor(options: { heading: string; message?: string }) {
+  constructor(options: { heading: string; body?: string }) {
     if (!this.element) {
       this.element = startLoader(options);
     }
   }
 
-  update(options: { heading?: string; message?: string }) {
+  update(options: { heading?: string; body?: string }) {
     if (!this.element) return;
     updateLoader(this.element, options);
   }

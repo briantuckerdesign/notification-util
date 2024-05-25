@@ -7,7 +7,7 @@ import { notificationConfig } from '../config'; // Import the configuration
  * @param {HTMLElement} container - The container to which the notification will be appended.
  * @param {string} type - The type of the notification (e.g., 'success', 'error'), used to determine the icon and styling.
  * @param {string} heading - The heading text of the notification.
- * @param {string} message - The message text of the notification.
+ * @param {string} body - The body text of the notification.
  * @param {string} notificationId - A unique identifier for the notification, used for targeting the notification after creation.
  * @returns {HTMLElement} The newly created notification element.
  */
@@ -15,36 +15,36 @@ export function populateNotification(
   container,
   type,
   heading,
-  message,
+  body,
   notificationId
 ) {
   const {
     notificationClass,
     headingWrapperClass,
     iconClass,
-    messageClass,
+    bodyClass,
     headingClass,
-    durationClass
+    progressBarClass
   } = notificationConfig.classes;
 
   const notificationToInject = `
-<div sn-notification="${notificationId}" class="${notificationClass} is-${type}" >
-  <div sn-heading-wrapper class="${headingWrapperClass}">
-    <div sn-notification-icon class="${iconClass}">${icons.get(type)}</div>
-    <div sn-notification-heading="true" class="${headingClass}">${heading}</div>
+<div nu_notification="${notificationId}" class="${notificationClass} is-${type}" >
+  <div nu_heading-wrapper class="${headingWrapperClass}">
+    <div nu_notification-icon class="${iconClass} is-${type}"">${icons.get(
+    type
+  )}</div>
+    <div nu_notification-heading="true" class="${headingClass}">${heading}</div>
   </div>
-  <div sn-notification-message class="${messageClass}">${message}</div>
-  <div sn-notification-duration class="${durationClass}"></div>
+  <div nu_notification-body class="${bodyClass}">${body}</div>
+  <div nu_notification-progress-bar class="${progressBarClass}"></div>
 </div>`;
 
   container.insertAdjacentHTML('beforeend', notificationToInject);
   const notification = container.querySelector(
-    `[sn-notification="${notificationId}"]`
+    `[nu_notification="${notificationId}"]`
   );
-  const messageElement = notification.querySelector(
-    '[sn-notification-message]'
-  );
-  if (!message) messageElement.style.display = 'none';
+  const bodyElement = notification.querySelector('[nu_notification-body]');
+  if (!body) bodyElement.style.display = 'none';
 
   return notification;
 }
