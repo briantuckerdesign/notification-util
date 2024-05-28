@@ -147,8 +147,4 @@ loadingIndicator.update({
 // some time passes
 
 loadingIndicator.close();
-
-// some time passes
-
-myLoaderMessage.close();
 ```
