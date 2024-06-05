@@ -67,7 +67,7 @@ You can override any of default settings by following the structure below.
 | → warning             | `string` injected as HTML                                                                       |
 | → error               | `string` injected as HTML                                                                       |
 | → debug               | `string` injected as HTML                                                                       |
-| → loading             | `string` injected as HTML                                                                       |
+| → info                | `string` injected as HTML                                                                       |
 | → spinner             | `string` injected as HTML                                                                       |
 | Theme                 | `string` light / dark / auto / none                                                             |
 
